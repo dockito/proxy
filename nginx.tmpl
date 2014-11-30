@@ -68,6 +68,14 @@ upstream {{ $host }} {
 server {
 	server_name {{ $host }};
 
+	{{ $firstContainer := index $containers 0 }}
+	{{ if $firstContainer.Env.VIRTUAL_ALLOW }}
+			{{ range $i, $allowed := split $firstContainer.Env.VIRTUAL_ALLOW "," }}
+					allow {{ $allowed }};
+			{{ end }}
+			deny all;
+	{{ end }}
+
 	location / {
 		proxy_pass http://{{ $host }};
 	}
