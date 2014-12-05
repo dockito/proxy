@@ -121,6 +121,8 @@ server {
 server {
 	server_name {{ $host }};
 
+	client_max_body_size 1024m;
+
 	location / {
 		proxy_pass http://{{ $host }};
 	}
