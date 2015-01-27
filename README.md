@@ -5,8 +5,6 @@ Fork of the amazing https://github.com/jwilder/nginx-proxy to add support to:
 * VIRTUAL_ALLOW: https://github.com/jwilder/nginx-proxy/issues/36;
 * Increased maximum upload limit to 1024m.
 
-For more information on usage, check https://github.com/jwilder/nginx-proxy.
-
 See [Automated Nginx Reverse Proxy for Docker][2] for why you might want to use this.
 
 ### Usage
@@ -30,7 +28,11 @@ If your container exposes multiple ports, nginx-proxy will default to the servic
 
 ### Multiple Hosts
 
-If you need to support multipe virtual hosts for a container, you can separate each entry with commas.  For example, `foo.bar.com,baz.bar.com,bar.com` and each host will be setup the same.
+If you need to support multiple virtual hosts for a container, you can separate each entry with commas.  For example, `foo.bar.com,baz.bar.com,bar.com` and each host will be setup the same.
+
+### Wildcard Hosts
+
+You can also use wildcards at the beginning and the end of host name, like `*.bar.com` or `foo.bar.*`. Or even a regular expression, which can be very useful in conjunction with a wildcard DNS service like [xip.io](http://xip.io), using `~^foo\.bar\..*\.xip\.io` will match `foo.bar.127.0.0.1.xip.io`, `foo.bar.10.0.2.2.xip.io` and all other given IPs. More information about this topic can be found in the nginx documentation about [`server_names`](http://nginx.org/en/docs/http/server_names.html).
 
 ### Separate Containers
 
@@ -102,3 +104,12 @@ Note that in the latter case, a browser may get an connection error as no certif
 to establish a connection.  A self-signed or generic cert named `default.crt` and `default.key`
 will allow a client browser to make a SSL connection (likely w/ a warning) and subsequently receive
 a 503.
+
+### Basic Authentication Support
+
+In order to be able to securize your virtual host, you have to create a file named as its equivalent VIRTUAL_HOST variable on directory
+/etc/nginx/htpasswd/$VIRTUAL_HOST
+
+    $ docker run -d -p 80:80 -p 443:443 -v /path/to/htpasswd:/etc/nginx/htpasswd -v /path/to/certs:/etc/nginx/certs -v /var/run/docker.sock:/tmp/docker.sock jwilder/nginx-proxy
+
+You'll need apache2-utils on the machine you plan to create de htpasswd file. Follow these [instructions](http://httpd.apache.org/docs/2.2/programs/htpasswd.html)
