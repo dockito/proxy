@@ -5,6 +5,10 @@ Fork of the amazing https://github.com/jwilder/nginx-proxy to add support to:
 * VIRTUAL_ALLOW: https://github.com/jwilder/nginx-proxy/issues/36;
 * Increased maximum upload limit to 1024m.
 
+![nginx 1.9.6](https://img.shields.io/badge/nginx-1.9.6-brightgreen.svg) ![License MIT](https://img.shields.io/badge/license-MIT-blue.svg) 
+
+It sets up a container running nginx and [docker-gen][1].  docker-gen generates reverse proxy configs for nginx and reloads nginx when containers are started and stopped.
+
 See [Automated Nginx Reverse Proxy for Docker][2] for why you might want to use this.
 
 ### Usage
