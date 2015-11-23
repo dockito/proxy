@@ -179,6 +179,14 @@ server {
 	include /etc/nginx/vhost.d/default;
 	{{ end }}
 
+	{{ $firstContainer := index $containers 0 }}
+	{{ if $firstContainer.Env.VIRTUAL_ALLOW }}
+			{{ range $i, $allowed := split $firstContainer.Env.VIRTUAL_ALLOW "," }}
+					allow {{ $allowed }};
+			{{ end }}
+			deny all;
+	{{ end }}
+
 	client_max_body_size 1024m;
 
 	location / {
